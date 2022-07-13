@@ -10,38 +10,38 @@ import { Status, User } from './model/user';
 export class AuthController {
     constructor(private authService: AuthService){}
 
-    @Post()
+    @Post('/register')
     @UsePipes(ValidationPipe)
     createUser(@Body() userDto: UserDto): User {
         return this.authService.createUser(userDto)
     }
 
-    @Post()
+    @Post('/login')
     @UsePipes(ValidationPipe)
     loginUser(@Body() loginDto: LoginDto): LoginMsg {
         return this.authService.loginUser(loginDto)
     }
 
     @Get()
-    getAllUsers(@Query(ValidationPipe) filterUsersDto: FilterUsersDto): User[] {
+    getAllUsers(@Query(ValidationPipe) filterUsersDto: FilterUsersDto): User[] {        
         if(Object.keys(filterUsersDto).length){
             return this.authService.getAllUsersWithFilter(filterUsersDto)
         } else {
-            this.authService.getAllUsers()
+            return this.authService.getAllUsers()
         }
     }
 
-    @Get('/:id')
+    @Get('/user/:id')
     getUserById(@Param('id') id: string): User {
         return this.authService.getUserById(id)
     }
 
-    @Patch('/:id')
+    @Patch('/user/:id')
     updateUser(@Param('id') id: string, @Body('status') status: Status): User{
         return this.authService.updateUser(id, status)
     }
 
-    @Delete('/:id')
+    @Delete('/user/:id')
     deleteUser(@Param('id') id: string): LoginMsg {
         return this.authService.deleteUser(id)
     }

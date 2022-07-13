@@ -29,13 +29,13 @@ export class AuthService {
 
     loginUser(loginDto: LoginDto): LoginMsg {
        const { email, pass } = loginDto
-       const user = this.users.filter( item => item.pass == pass)
+       const user = this.users.find( item => item.pass == pass)
        //will still change this implementation
-       if(typeof user != undefined){
+       if(user){
            return {
             status: true,
             message: "successfully signed in",
-            user: user[0]
+            user: user
            }
        } else {
         return {
@@ -84,7 +84,7 @@ export class AuthService {
        return user
     }
 
-    deleteUser(id: string): LoginMsg{
+    deleteUser(id: string): LoginMsg {
         let user = this.getUserById(id)
         this.users = this.users.filter(item => id !== item.id)
         return {
