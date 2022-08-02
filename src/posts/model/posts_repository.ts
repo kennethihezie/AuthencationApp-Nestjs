@@ -20,8 +20,8 @@ export class PostsRepository{
       return await this.firestoreHelper.getPostById(id)
    }
 
-   async updatePost(id: string, postDto: PostDto): Promise<void>{
-     return this.firestoreHelper.updatePost(id, postDto)
+   async updatePost(id: string, post: PostDto): Promise<void>{
+     return this.firestoreHelper.updatePost(id, post)
    }
 
    async deletePost(id: string): Promise<void>{

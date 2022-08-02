@@ -1,13 +1,14 @@
 import { Injectable } from "@nestjs/common"
 import { addDoc, collection, deleteDoc, doc, DocumentData, DocumentReference, DocumentSnapshot, getDoc, getDocs, getFirestore, QuerySnapshot, updateDoc } from "firebase/firestore"
 import { PostDto } from "src/posts/dto/post_dto"
+import { Posts } from "src/posts/model/posts"
 
 @Injectable()
 export class FireStoreHelper{
     private db = getFirestore()
 
     async createPost(post: PostDto): Promise<DocumentReference> {
-        return await addDoc(collection(this.db, "posts"), post)
+        return await addDoc(collection(this.db, "posts"), { post })
     }
 
     async getAllPosts(): Promise<QuerySnapshot<DocumentData>>{
@@ -18,8 +19,8 @@ export class FireStoreHelper{
         return await getDoc(doc(this.db, 'posts', id))
     }
 
-    async updatePost(id: string, postDto: PostDto): Promise<void>{
-        return updateDoc(doc(this.db, 'posts', id), { postDto })
+    async updatePost(id: string, post: PostDto): Promise<void>{
+        return updateDoc(doc(this.db, 'posts', id), { post })
     }
 
     async deletePost(id: string): Promise<void>{

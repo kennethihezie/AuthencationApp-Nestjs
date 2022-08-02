@@ -11,11 +11,13 @@ export class PostsService {
 
     async createPost(post: PostDto): Promise<Posts> {
         const { name, description, postImageUrl } = post
+        const timeStamp = Timestamp.fromDate(new Date(this.postRepository.setTimeDate()))
+
         const userPost = {
             name: name,
             description: description,
             postImageUrl: postImageUrl,
-            timeStamp: Timestamp.fromDate(new Date(this.postRepository.setTimeDate()))
+            timeStamp: timeStamp
         }
         const data = await this.postRepository.createPost(userPost)
 
@@ -24,32 +26,72 @@ export class PostsService {
             name: name,
             description: description,
             postImageUrl: postImageUrl,
-            timeStamp: Timestamp.fromDate(new Date(this.postRepository.setTimeDate()))
+            timeStamp: timeStamp
         }
     }
 
-    async getAllPost(){
+    async getAllPost(): Promise<Posts[]>{
         const allPosts = await this.postRepository.getAllPosts()
-        allPosts.forEach(result => {
-            console.log(result.id)
-            console.log(result.data())
+        const posts: Posts[] = []
+
+        allPosts.docs.flatMap( doc => {
+            const id = doc.id
+            const { name, description, postImageUrl, timeStamp } = doc.data().post
+            
+            const post = {
+                id: id,
+                name: name,
+                description: description, 
+                postImageUrl: postImageUrl,
+                timeStamp: timeStamp
+            }
+            posts.push(post)
+        })
+
+        return posts
+    }
+
+    async getPostById(id: string): Promise<Posts>{
+        const doc = (await this.postRepository.getPostById(id)).data().post
+        const { name, description, postImageUrl, timeStamp } = doc
+
+        const post = {
+            id: id,
+            name: name,
+            description: description, 
+            postImageUrl: postImageUrl,
+            timeStamp: timeStamp
         }
-        )
-        return
+
+        return post
     }
 
-    async getPostById(id: string){
-        const post = (await this.postRepository.getPostById(id)).data()
-        console.log(post);
-        return
-    }
+    async updatePost(id: string, posts: PostDto){
+        const { name, description, postImageUrl } = posts
+        const timeStamp = Timestamp.fromDate(new Date(this.postRepository.setTimeDate()))
+        const userPost = {
+            name: name,
+            description: description,
+            postImageUrl: postImageUrl,
+            timeStamp: timeStamp
+        }
 
-    async updatePost(id: string, postDto: PostDto){
-        const post = await this.postRepository.updatePost(id, postDto)
-        return
+        const post = await this.postRepository.updatePost(id, userPost)
+
+        return {
+            id: id,
+            name: name,
+            description: description,
+            postImageUrl: postImageUrl,
+            timeStamp: timeStamp
+        }
     }
 
     async deletePost(id: string){
-        return await this.postRepository.deletePost(id)
+        const deletePost = await this.postRepository.deletePost(id)
+        return {
+            status: true,
+            message: "deleted successfully",
+        }
     }
 }

@@ -35,4 +35,3 @@ export class PostsController {
 }
 
 //all endpoints is working
-//next class deserilize the data using the respective classes.
