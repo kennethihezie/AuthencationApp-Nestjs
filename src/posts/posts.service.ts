@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PostDto } from './dto/post_dto';
 import { PostsRepository } from './model/posts_repository';
-import { DocumentReference, Timestamp } from "firebase/firestore"
+import { Timestamp } from "firebase/firestore"
 import { Posts } from './model/posts';
 
 

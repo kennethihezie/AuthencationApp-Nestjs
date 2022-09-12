@@ -2,7 +2,6 @@ import { Injectable } from "@nestjs/common";
 import { FireStoreHelper } from "src/firebase/firestore_helper";
 import { PostDto } from "../dto/post_dto";
 import { DocumentReference, DocumentData, QuerySnapshot, DocumentSnapshot } from "firebase/firestore"
-import { Posts } from "./posts";
 
 @Injectable()
 export class PostsRepository{
